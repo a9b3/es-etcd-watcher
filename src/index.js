@@ -1,6 +1,4 @@
-const argv = require('yargs').argv
 import CommanderShepard from 'commander-shepard'
-import path from 'path'
 import changeHandler from './change-handler.js'
 
 const pkg = require('../package.json')

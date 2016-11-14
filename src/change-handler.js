@@ -29,7 +29,7 @@ function verifyConfig(config) {
   }
 }
 
-export default async function changeHandler({ args, options }) {
+export default async function changeHandler({ options }) {
   const configFilepath = path.resolve(options.config)
   const config = require(configFilepath).default || require(configFilepath)
   verifyConfig(config)
