@@ -18,8 +18,11 @@
     "mocha": "^3.1.2"
   },
   "dependencies": {
+    "@esayemm/toolkit": "^0.1.0",
     "babel-runtime": "^6.18.0",
     "commander-shepard": "1.2.2",
+    "es-etcd": "^1.1.4",
+    "lodash": "^4.17.0",
     "yargs": "^6.3.0"
   },
   "scripts": {
