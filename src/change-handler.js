@@ -10,9 +10,7 @@ const api = {
     invariant(toolkit.fileExists(src), `'src' must be a valid filepath`)
 
     const compiled = _.template(fs.readFileSync(src, { encoding: 'utf8' }), {
-      imports: {
-        '_': _,
-      },
+      imports: { _ },
     })
     const rendered = compiled(data)
     console.log(data)
