@@ -9,7 +9,11 @@ const api = {
   async template({ src, dest, data }) {
     invariant(toolkit.fileExists(src), `'src' must be a valid filepath`)
 
-    const compiled = _.template(fs.readFileSync(src, { encoding: 'utf8' }))
+    const compiled = _.template(fs.readFileSync(src, { encoding: 'utf8' }), {
+      imports: {
+        '_': _,
+      },
+    })
     const rendered = compiled(data)
     console.log(data)
     fs.writeFileSync(dest, rendered, { encoding: 'utf8' })
@@ -54,7 +58,7 @@ export default async function changeHandler({ options }) {
     esEtcd.watch(key, async (data) => {
       for (let i = 0; i < commands.length; i++) {
         if (commands[i].constructor === Function) {
-          await commands[i]({ data, api })
+          await commands[i]({ root: await esEtcd.get('/', { recursive: true }), data, api })
         } else if (commands[i].constructor === String) {
           await toolkit.execPromise(commands[i], { log: true })
         }
