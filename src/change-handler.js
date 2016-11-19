@@ -56,21 +56,21 @@ export default async function changeHandler({ options }) {
   const esEtcd = new EsEtcd(etcdConfigs)
 
   // For each key specified in config file, set up the etcd watcher
-  config.keys.forEach(({ key, commands }) => {
+  config.keys.forEach(async ({ key, commands }) => {
     // Initialize first time
     for (let i = 0; i < commands.length; i++) {
       if (commands[i].constructor === Function) {
-        await commands[i]({ root: await esEtcd.get('/', { recursive: true }), data, api })
+        await commands[i]({ root: await esEtcd.get('/', { recursive: true }), api })
       } else if (commands[i].constructor === String) {
         await toolkit.execPromise(commands[i], { log: true })
       }
     }
 
     // Watch for continuous changes
-    esEtcd.watch(key, async (data) => {
+    esEtcd.watch(key, async (changed) => {
       for (let i = 0; i < commands.length; i++) {
         if (commands[i].constructor === Function) {
-          await commands[i]({ root: await esEtcd.get('/', { recursive: true }), data, api })
+          await commands[i]({ root: await esEtcd.get('/', { recursive: true }), changed, api })
         } else if (commands[i].constructor === String) {
           await toolkit.execPromise(commands[i], { log: true })
         }
