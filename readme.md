@@ -28,10 +28,10 @@ module.exports = {
 			key: 'foo/keys',
 			commands: [
 				// you can pass async functions, which will be passed these args
-				async ({ data, api }) => api.template({ 
+				async ({ root, changed, api }) => api.template({ 
 					src: './foo.lodash_template',
 					dest: './foo.rendered',
-					data,
+					data: { root, changed },
 				}),
 				// or you can simply pass a string to be ran as a command
 				'nginx reload',
@@ -46,3 +46,17 @@ Run the watcher
 ```
 es-etcd-watcher --config /opt/es-etcd-watcher-config
 ```
+
+### Command Arguments
+
+- root
+
+Root will be the entire data structure stored in etcd
+
+- changed
+
+This will be just the changed data from etcd
+
+- api
+
+Currently provides the template function. Which will render a lodash template, you can pass in the root or changed data to the template to render a template based on etcd key changes.
