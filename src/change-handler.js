@@ -32,10 +32,13 @@ function verifyConfig(config) {
 }
 
 export default async function changeHandler({ options }) {
+
+  // Verify the supplied es etcd watcher config file
   const configFilepath = path.resolve(options.config)
   const config = require(configFilepath).default || require(configFilepath)
   verifyConfig(config)
 
+  // Connect to specified etcd instance
   const defaultEtcdConfigs = {
     scheme: 'http',
     host: '0.0.0.0',
@@ -52,7 +55,18 @@ export default async function changeHandler({ options }) {
   etcdConfigs.agentOpts = agentOpts
   const esEtcd = new EsEtcd(etcdConfigs)
 
+  // For each key specified in config file, set up the etcd watcher
   config.keys.forEach(({ key, commands }) => {
+    // Initialize first time
+    for (let i = 0; i < commands.length; i++) {
+      if (commands[i].constructor === Function) {
+        await commands[i]({ root: await esEtcd.get('/', { recursive: true }), data, api })
+      } else if (commands[i].constructor === String) {
+        await toolkit.execPromise(commands[i], { log: true })
+      }
+    }
+
+    // Watch for continuous changes
     esEtcd.watch(key, async (data) => {
       for (let i = 0; i < commands.length; i++) {
         if (commands[i].constructor === Function) {
@@ -63,4 +77,5 @@ export default async function changeHandler({ options }) {
       }
     })
   })
+
 }
