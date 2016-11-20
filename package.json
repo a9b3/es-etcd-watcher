@@ -36,6 +36,6 @@
   },
   "main": "lib/index.js",
   "bin": {
-    "es-etcd-watcher": "./bin/es-etcd-watcher"
+    "es-etcd-watcher": "./lib/index.js"
   }
 }
