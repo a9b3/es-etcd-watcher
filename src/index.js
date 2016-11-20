@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import CommanderShepard from 'commander-shepard'
 import changeHandler from './change-handler.js'
 
