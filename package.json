@@ -31,7 +31,7 @@
     "test": "NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers js:babel-register --require babel-polyfill $(find . -name '*.spec.js' ! -ipath '*node_modules*')",
     "test:watch": "NODE_ENV=test ./node_modules/mocha/bin/mocha --compilers js:babel-register --require babel-polyfill --watch $(find . -name '*.spec.js' ! -ipath '*node_modules*')",
     "preversion": "npm run eslint && npm run test",
-    "version": "git add .",
+    "version": "npm run babel && git add .",
     "postversion": "git push && git push --tags && npm publish"
   },
   "main": "./index.js",
