@@ -56,6 +56,8 @@ export default async function changeHandler({ options }) {
     })
   }
   etcdConfigs.agentOpts = agentOpts
+
+  console.log(`connecting etcd with configurations ${JSON.stringify(etcdConfigs)}`)
   const esEtcd = new EsEtcd(etcdConfigs)
 
   // For each key specified in config file, set up the etcd watcher
